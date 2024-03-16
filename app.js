@@ -1,5 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
+
+const bookRoutes = require('./routes/book');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -11,6 +15,13 @@ app.use((req, res, next) => {
   });
 
 app.use(express.json());
+app.use('/api/books', bookRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')))
+
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+})
 
 mongoose.connect('mongodb+srv://alexiaaj:randompassword@cluster0.7avv1eq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
   { useNewUrlParser: true,
