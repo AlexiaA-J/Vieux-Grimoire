@@ -50,6 +50,19 @@ exports.getAllBooks = (req, res, next) => {
     .then(() => { res.status(201).json({message: 'Objet enregistré !'})})
     .catch(error => { res.status(400).json( { error })})
   };
+
+  exports.addRating = (req, res, next) => {
+      Book.findOne({ _id: req.params.id })
+      .then((book) => {
+        book.ratings.push({userId: req.auth.userId, grade: req.body.rating});
+        book.averageRating = book.ratings.reduce((acc, rating) => acc + rating.grade, 0) / book.ratings.length;
+        book.averageRating = book.averageRating.toFixed(1);
+    
+        return book.save()
+          .then((book) => res.status(201).json(book))
+          .catch(error => res.status(400).json({ error }));
+      });
+    };
   
   // MODIFY
 
