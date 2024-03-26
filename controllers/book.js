@@ -16,7 +16,7 @@ exports.getAllBooks = (req, res, next) => {
         });
       }
     );
-  }
+  };
 
   exports.getOneBook = (req, res, next) => {
     Book.findOne({
@@ -32,7 +32,15 @@ exports.getAllBooks = (req, res, next) => {
         });
       }
     );
-  }
+  };
+
+  exports.bestratingBook = (req, res, next) => {
+    Book.find()
+    .sort({averageRating: -1})
+    .limit(3)
+    .then(bestRating => res.status(200).json(bestRating))
+    .catch(error => res.status(400).json({ error }));
+  };
 
 // CREATE
 
